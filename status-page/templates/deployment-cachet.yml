@@ -23,28 +23,7 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: {{ .Values.cachet.service.port }}
+          - containerPort: {{ .Values.cachet.service.port }}
         env:
-        {{- include "cachet.env.var" . | indent 6 -}}
-        #   # - name: DB_DRIVER
-        #   #   value: {{ .Values.cachet.env.DB_DRIVER }}
-        #   # - name: DB_HOST
-        #   #   value: {{ .Values.cachet.env.DB_HOST }}
-        #   # - name: DB_PORT
-        #   #   value: "{{ .Values.cachet.env.DB_PORT }}"
-        #   # - name: DB_DATABASE
-        #   #   value: {{ .Values.cachet.env.DB_DATABASE }}
-        #   # - name: DB_USERNAME
-        #   #   value: {{ .Values.cachet.env.DB_USERNAME }}
-        #   # - name: DB_PASSWORD
-        #   #   value: {{ .Values.cachet.env.DB_PASSWORD }}
-        #   # - name: DB_PREFIX
-        #   #   value: "{{ .Values.cachet.env.DB_PREFIX }}"
-        #   # - name: APP_KEY
-        #   #   value: "{{ .Values.cachet.env.APP_KEY }}"
-        #   # - name: APP_LOG
-        #   #   value: {{ .Values.cachet.env.APP_LOG }}
-        #   # - name: APP_ENV
-        #   #   value: "{{ .Values.cachet.env.APP_ENV }}"
-        #   # - name: DOCKER
-        #   #   value: {{ .Values.cachet.env.DOCKER }}
+        {{- include "helper.env.var" . | indent 6 }}
+

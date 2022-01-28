@@ -61,7 +61,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "cachet.env.var" -}}
+{{- define "helper.env.var" -}}
 {{- range $key, $val := .Values.cachet.env -}}
 - name: {{ $key }}
   value: {{ $val }}
