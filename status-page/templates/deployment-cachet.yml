@@ -24,7 +24,8 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: {{ .Values.cachet.service.port }}
-        # env:
+        env:
+        {{- include "cachet.env.var" . | indent 6 -}}
         #   # - name: DB_DRIVER
         #   #   value: {{ .Values.cachet.env.DB_DRIVER }}
         #   # - name: DB_HOST

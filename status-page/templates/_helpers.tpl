@@ -60,3 +60,10 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "cachet.env.var" -}}
+{{- range $key, $val := .Values.cachet.env -}}
+- name: {{ $key }}
+  value: {{ $val }}
+{{- end -}}
+{{- end -}}
