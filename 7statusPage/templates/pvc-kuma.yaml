@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.kuma.volumes.volumeClaimName }}
+  labels:
+    app: {{ .Values.kuma.labels }}
+spec:
+  resources:
+    requests:
+      storage: "500m"
+  accessModes:
+    - {{ .Values.kuma.volumes.accessModes }}

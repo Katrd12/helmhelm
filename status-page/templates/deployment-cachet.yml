@@ -1,0 +1,49 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.cachet.fullname }}
+  labels: 
+    app: {{ .Values.cachet.labels }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.cachet.labels }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.cachet.labels }}
+    spec:
+      containers:
+      - name: {{ .Values.cachet.fullname }}
+        image: "{{ .Values.cachet.image.repository }}:{{ .Values.cachet.image.tag }}"
+        imagePullPolicy: {{ .Values.cachet.image.pullPolicy }}
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: {{ .Values.cachet.service.port }}
+        # env:
+        #   # - name: DB_DRIVER
+        #   #   value: {{ .Values.cachet.env.DB_DRIVER }}
+        #   # - name: DB_HOST
+        #   #   value: {{ .Values.cachet.env.DB_HOST }}
+        #   # - name: DB_PORT
+        #   #   value: "{{ .Values.cachet.env.DB_PORT }}"
+        #   # - name: DB_DATABASE
+        #   #   value: {{ .Values.cachet.env.DB_DATABASE }}
+        #   # - name: DB_USERNAME
+        #   #   value: {{ .Values.cachet.env.DB_USERNAME }}
+        #   # - name: DB_PASSWORD
+        #   #   value: {{ .Values.cachet.env.DB_PASSWORD }}
+        #   # - name: DB_PREFIX
+        #   #   value: "{{ .Values.cachet.env.DB_PREFIX }}"
+        #   # - name: APP_KEY
+        #   #   value: "{{ .Values.cachet.env.APP_KEY }}"
+        #   # - name: APP_LOG
+        #   #   value: {{ .Values.cachet.env.APP_LOG }}
+        #   # - name: APP_ENV
+        #   #   value: "{{ .Values.cachet.env.APP_ENV }}"
+        #   # - name: DOCKER
+        #   #   value: {{ .Values.cachet.env.DOCKER }}

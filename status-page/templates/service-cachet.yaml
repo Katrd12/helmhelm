@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.cachet.fullname }}
+  labels:
+    app: {{ .Values.cachet.labels }}
+spec:
+  type: {{ .Values.cachet.service.type }}
+  selector:
+    app: {{ .Values.cachet.labels }}
+  ports:
+  - name: {{ .Values.cachet.service.name }}
+    port: {{ .Values.cachet.service.port }}
+    targetPort: {{ .Values.cachet.service.port }}
+    # nodePort: {{ .Values.cachet.service.nodePort }}
+    

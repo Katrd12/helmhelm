@@ -1,0 +1,57 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: status
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: status
+#   ports:
+#   - port: 3001
+#     targetPort: 3001
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: kuma-pvc
+#   labels:
+#     app: status
+# spec:
+#   resources:
+#     requests:
+#       storage: "500m"
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.kuma.fullname }}
+  labels: 
+    app: {{ .Values.kuma.labels }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.kuma.labels }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.kuma.labels }}
+    spec:
+      containers:
+      - name: {{ .Values.kuma.fullname }}
+        image: "{{ .Values.kuma.image.repository }}:{{ .Values.kuma.image.tag }}"
+        imagePullPolicy: {{ .Values.kuma.image.pullPolicy }}
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: {{ .Values.kuma.service.port }}
+        volumeMounts:
+        - name: {{ .Values.kuma.volumes.name }}
+          mountPath: {{ .Values.kuma.volumes.mountPath }}
+      volumes:
+        - name: {{ .Values.kuma.volumes.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.kuma.volumes.volumeClaimName }}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.kuma.fullname }}
+  labels:
+    app: {{ .Values.kuma.labels }}
+spec:
+  type: {{ .Values.kuma.service.type }}
+  selector:
+    app: {{ .Values.kuma.fullname }}
+  ports:
+  - port: {{ .Values.kuma.service.port }}
+    
