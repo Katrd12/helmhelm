@@ -128,19 +128,19 @@ cachet:
     port: "8000"
     nodePort: "30800"
   env:
-      DB_DRIVER: pgsql
-      DB_HOST: postgresql
-      DB_PORT: "5432"
-      DB_DATABASE: cachetdb
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      DB_PREFIX: chq_
-      APP_KEY: 'base64:8AOwPDH6oTOKk75ISTx8o7dOKBFjgfCDiXeaGSLl12c='
-      APP_LOG: errorlog
-      APP_ENV: ${APP_ENV:-production}
-    #   - APP_DEBUG=false
-    #   - DEBUG=false
-      DOCKER: true
+    DB_DRIVER: pgsql
+    DB_HOST: postgresql
+    DB_PORT: "5432"
+    DB_DATABASE: cachetdb
+    DB_USERNAME: postgres
+    DB_PASSWORD: postgres
+    DB_PREFIX: chq_
+    APP_KEY: 'base64:8AOwPDH6oTOKk75ISTx8o7dOKBFjgfCDiXeaGSLl12c='
+    APP_LOG: errorlog
+    APP_ENV: ${APP_ENV:-production}
+  #   - APP_DEBUG=false
+  #   - DEBUG=false
+    DOCKER: 'true'
 
 postgresql:
   enabled: true
