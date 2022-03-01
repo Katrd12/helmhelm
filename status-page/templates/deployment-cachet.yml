@@ -20,10 +20,12 @@ spec:
         imagePullPolicy: {{ .Values.cachet.image.pullPolicy }}
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: {{ .Values.cachet.container.size}}
+            cpu: {{ .Values.cachet.container.CPU}}
         ports:
           - containerPort: {{ .Values.cachet.service.port }}
         env:
-        {{- include "helper.env.var" . | indent 6 }}
-
+          {{- range $key, $val := .Values.cachet.env }}
+            {{ printf "- name: %s" $key }}
+            {{ printf "  value: %s" ( $val | quote ) }}   
+          {{- end }}   

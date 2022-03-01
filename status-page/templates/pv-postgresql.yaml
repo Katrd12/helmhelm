@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.postgresql.pv.name }}
+  labels:
+    name: {{ .Values.postgresql.pv.labels }}
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: {{ .Values.pv.mode }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: {{ .Values.pv.policy }}
+  storageClassName: {{ .Values.pv.storageClass }}
+  # mountOptions:
+  #   - nfs
+  local:
+    # path: '/test-pv/postgresql'
+    path: '/data/status_page/postgresql_data'
+  nodeAffinity:
+    required:
+      nodeSelectorTerms: 
+      - matchExpressions: 
+        - key: host-storage
+          operator: In
+          values: 
+          - local
+      - matchExpressions: 
+        - key: kubernetes.io/hostname
+          operator: In
+          values: 
+          - 7rewards-dev-k8s-worker-1
+

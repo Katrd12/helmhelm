@@ -57,7 +57,7 @@ ingress:
           pathType: Prefix
           backend:
           service:
-            name: kuma-status
+            name: status-kuma-status
             port: 
               number: 3001
 
@@ -67,14 +67,15 @@ ingress:
           pathType: Prefix
           backend:
           service:
-            name: incident-page
+            name: status-incident-page
             port: 
               number: 8000
 
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls: 
+   - secretName: sevensystem-vn-2021
+     hosts:
+       - dev-kuma.sevensystem.vn
+       - dev-cachet.sevensystem.vn
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -91,65 +92,104 @@ resources: {}
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-
 kuma:
-  fullname: kuma-status
-  labels: status-page
+  fullname: status-kuma-status
+  labels: status-kuma-status
+  container:
+    size: "128Mi"
+    CPU: "500m"
   image:
     repository: khoatd257/status_page
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.2"
+    tag: "0.3"
   service:
     name: http
     type: ClusterIP
     port: "3001"
-    nodePort: "30301"
+    # nodePort: "30301"
   volumes:
     name: kuma-ps
+    labels: status-kuma-storage
     mountPath: /app/data
     volumeClaimName: kuma-pvc
     accessModes: ReadWriteOnce
+  env:
+    INCIDENTURL: 'https://dev-cachet.sevensystem.vn'
+  pv: 
+    name: status-kuma-pv
+    size: 2Gi
+    storageClass: data-storage
+    annotations:
+      helm.sh/resource-policy: "keep"
+  
+
+pv:
+  storageClass: data-storage
+  mode: Filesystem
+  policy: Retain
 
 cachet:
-  fullname: incident-page
-  labels: incident-page
+  fullname: status-incident-page
+  labels: status-incident-page
+  container:
+    size: "128Mi"
+    CPU: "500m"
   image:
     repository: khoatd257/cachet_cus
-    pullPolicy: IfNotPresent
-    tag: "0.2"
+    pullPolicy: Always
+    tag: "0.3"
   service:
     name: http
     type: ClusterIP
     port: "8000"
-    nodePort: "30800"
+    # nodePort: "30800"
   env:
     DB_DRIVER: pgsql
-    DB_HOST: postgresql
+    DB_HOST: status-postgresql
     DB_PORT: "5432"
     DB_DATABASE: cachetdb
     DB_USERNAME: postgres
-    DB_PASSWORD: postgres
+    DB_PASSWORD: 'SE!#0090'
     DB_PREFIX: chq_
     APP_KEY: 'base64:8AOwPDH6oTOKk75ISTx8o7dOKBFjgfCDiXeaGSLl12c='
-    APP_LOG: errorlog
+    APP_LOG: errorlog``
     APP_ENV: ${APP_ENV:-production}
-  #   - APP_DEBUG=false
-  #   - DEBUG=false
+    APP_DEBUG: false
+    DEBUG: false
     DOCKER: 'true'
 
 postgresql:
   enabled: true
+  fullnameOverride: "status-postgresql"
+  labels: "status-postgresql"
   postgresqlDatabase: "cachetdb"
   postgresqlUsername: "postgres"
-  postgresqlPassword: "SE!#0090"
-  postgresqlPostgresPassword: "SE!#0090"
+  postgresqlPassword: 'SE!#0090'
+  postgresqlPostgresPassword: 'SE!#0090'
+  # storageClass: data-storage
+  persistence:
+    enabled: true
+    existingClaim: "postgres-pvc"
+    # selector: status-storage
+    # storageClass: data-storage
+    # size: 1Gi
+    mountPath: '/bitnami/postgresql'
+  pv:
+    volumeClaimName: postgres-pvc
+    labels: status-postgresql-storage
+    name: status-postgresql-pv
+    size: 2Gi
+    storageClass: data-storage
+    annotations:
+      helm.sh/resource-policy: "keep"
   service:
     type: ClusterIP
+    # type: NodePort
     port: "5432"
     # nodePort: "32432"
 

@@ -44,13 +44,19 @@ spec:
         imagePullPolicy: {{ .Values.kuma.image.pullPolicy }}
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: {{ .Values.kuma.container.size}}
+            cpu: {{ .Values.kuma.container.CPU}}
         ports:
         - containerPort: {{ .Values.kuma.service.port }}
         volumeMounts:
         - name: {{ .Values.kuma.volumes.name }}
           mountPath: {{ .Values.kuma.volumes.mountPath }}
+        env:
+          {{- range $key, $val := .Values.kuma.env }}
+            {{ printf "- name: %s" $key }}
+            {{ printf "  value: %s" ( $val | quote ) }}   
+          {{- end }}   
+
       volumes:
         - name: {{ .Values.kuma.volumes.name }}
           persistentVolumeClaim:

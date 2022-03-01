@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.kuma.pv.name }}
+  labels:
+    name: {{ .Values.kuma.volumes.labels }}
+spec:
+  capacity:
+    storage: {{ .Values.kuma.pv.size }}
+  volumeMode: {{ .Values.pv.mode }}
+  accessModes:
+    - {{ .Values.kuma.volumes.accessModes }}
+  persistentVolumeReclaimPolicy: {{ .Values.pv.policy }}
+  storageClassName: {{ .Values.pv.storageClass }}
+  # mountOptions:
+  #   - nfs
+  local:
+    # path: '/test-pv/kuma'
+    path: '/data/status_page/kuma_log'
+  nodeAffinity:
+    required:
+      nodeSelectorTerms: 
+      - matchExpressions: 
+        - key: host-storage
+          operator: In
+          values: 
+          - local
+      - matchExpressions: 
+        - key: kubernetes.io/hostname
+          operator: In
+          values: 
+          - 7rewards-dev-k8s-worker-1
+
+

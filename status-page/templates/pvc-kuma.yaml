@@ -5,10 +5,18 @@ metadata:
   labels:
     app: {{ .Values.kuma.labels }}
   annotations:
+  # {{- with .Values.kuma.pv.annotations }}
+  #   {{- toYaml . | nindent 4 }}
+  # {{- end }}
     helm.sh/resource-policy: "keep"
+
 spec:
+  storageClassName: {{ .Values.pv.storageClass }}
   resources:
     requests:
-      storage: "500m"
+      storage: "2Gi"
   accessModes:
     - {{ .Values.kuma.volumes.accessModes }}
+  selector:
+    matchLabels:  
+      name: {{ .Values.kuma.volumes.labels }}
