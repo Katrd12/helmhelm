@@ -103,10 +103,10 @@ kuma:
     size: "128Mi"
     CPU: "500m"
   image:
-    repository: khoatd257/status_page
-    pullPolicy: Always
+    repository: siliconstraits/uptime-kuma
+    pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.3"
+    tag: "0.1"
   service:
     name: http
     type: ClusterIP
@@ -140,9 +140,9 @@ cachet:
     size: "128Mi"
     CPU: "500m"
   image:
-    repository: khoatd257/cachet_cus
-    pullPolicy: Always
-    tag: "0.3"
+    repository: siliconstraits/cachet-hq
+    pullPolicy: IfNotPresent
+    tag: "0.1"
   service:
     name: http
     type: ClusterIP
