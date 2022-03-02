@@ -1,0 +1,18 @@
+releases:
+  - name: status-page
+    namespace: status-page
+    chart: charts/status_page
+    kubeContext: minikube
+    missingFileHandler: Debug
+    values:
+      - "helm_vars/status_page/values.yaml"
+    wait: true
+
+  - name: posgresql
+    namespace: status-page
+    chart: charts/postgresql
+    kubeContext: minikube
+    missingFileHandler: Debug
+    values:
+      - "helm_vars/postgresql/values.yaml"
+    wait: true
